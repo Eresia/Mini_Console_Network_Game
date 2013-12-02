@@ -124,7 +124,7 @@ bool deplacement(int terrain[TAILLE_TERRAIN_HAUTEUR][TAILLE_TERRAIN_LARGEUR], in
 	if (((position[0] + x) >= 0) && ((position[0] + x) <= (TAILLE_TERRAIN_HAUTEUR -1)) && ((position[1] + y) >= 0) && ((position[1] + y) <= (TAILLE_TERRAIN_LARGEUR - 1)))
 	{
 		//Si le déplacement ne mène pas vers un obstacle (ou un autre ennemi dans le cas d'un ennemi)
-		if ((terrain[position[0] + x][position[1] + y] != 2) && (terrain[position[0] + x][position[1] + y] != 3) && (terrain[position[0] + x][position[1] + y] != (MONSTRE + 1)) && ((terrain[position[0] + x][position[1] + y] != 8) || (importEnnemi == false)))
+		if ((terrain[position[0] + x][position[1] + y] != 2) && (terrain[position[0] + x][position[1] + y] != 3) && (terrain[position[0] + x][position[1] + y] != (MONSTRETEMP)) && ((terrain[position[0] + x][position[1] + y] != MONSTRE) || (importEnnemi == false)) && ((terrain[position[0] + x][position[1] + y] != MONSTREEN) || (importEnnemi == false)))
 		{
 			//On modifie la position du personnage
 			position[0] += x;
@@ -138,7 +138,7 @@ bool deplacement(int terrain[TAILLE_TERRAIN_HAUTEUR][TAILLE_TERRAIN_LARGEUR], in
 }
 
 //fonction de déplacement des ennemis
-bool deplace_ennemi(int terrain[TAILLE_TERRAIN_HAUTEUR][TAILLE_TERRAIN_LARGEUR], int sousTerrain[TAILLE_TERRAIN_HAUTEUR][TAILLE_TERRAIN_LARGEUR], int positionPerso[2], int *vies, char message[TAILLE_MAX_TABLEAU_AFFICHE])
+bool deplace_ennemi(int terrain[TAILLE_TERRAIN_HAUTEUR][TAILLE_TERRAIN_LARGEUR], int sousTerrain[TAILLE_TERRAIN_HAUTEUR][TAILLE_TERRAIN_LARGEUR], int positionPerso[2], int *vies, char message[TAILLE_MAX_TABLEAU_AFFICHE], int ennemis)
 {
 	int i = 0, j = 0;
 	int xDiff = 0, yDiff = 0;
@@ -151,7 +151,7 @@ bool deplace_ennemi(int terrain[TAILLE_TERRAIN_HAUTEUR][TAILLE_TERRAIN_LARGEUR],
 	{
 		for (j = 0; j < TAILLE_TERRAIN_LARGEUR; j++)
 		{
-			if (terrain[i][j] == MONSTRE)
+			if (terrain[i][j] == ennemis)
 			{
 				positionEnnemi[0] = i;
 				positionEnnemi[1] = j;
@@ -210,7 +210,7 @@ bool deplace_ennemi(int terrain[TAILLE_TERRAIN_HAUTEUR][TAILLE_TERRAIN_LARGEUR],
 				else
 				{
 					//On le place sur le terrain
-					terrain[positionEnnemi[0]][positionEnnemi[1]] = MONSTRE + 1;
+					terrain[positionEnnemi[0]][positionEnnemi[1]] = MONSTRETEMP;
 				}	
 				directionInterdite = 0;
 				directionValide = false;
@@ -223,9 +223,9 @@ bool deplace_ennemi(int terrain[TAILLE_TERRAIN_HAUTEUR][TAILLE_TERRAIN_LARGEUR],
 	{
 		for (j = 0; j < TAILLE_TERRAIN_LARGEUR; j++)
 		{
-			if (terrain[i][j] == (MONSTRE + 1))
+			if (terrain[i][j] == (MONSTRETEMP))
 			{
-				terrain[i][j] = MONSTRE;
+				terrain[i][j] = ennemis;
 			}
 		}
 	}
@@ -243,11 +243,6 @@ bool application_terrain(int terrain[TAILLE_TERRAIN_HAUTEUR][TAILLE_TERRAIN_LARG
 		//On enlève la pièce d'or du terrain
 		terrain[positionPerso[0]][positionPerso[1]] = HERBE;
 		//Si le joueur a ses dix pièces d'or
-		if (*compteurPO == 10)
-		{
-			//C'est la fin du jeu
-			return false;
-		}
 		sprintf(messageModif, "Vous gagnez une pièce d'or\n%s", message);
 		strcpy(message, messageModif);
 	}

@@ -98,7 +98,7 @@ void affiche_carte(int terrain[TAILLE_TERRAIN_HAUTEUR][TAILLE_TERRAIN_LARGEUR], 
 
 	//On affiche le nombre de vie(s), de pièce(s) et de clef(s)
 	printf(" Vous   : Vie%s: %d - Pièce%s: %d - Clé%s: %d\n", vies[0] <= 1 ? " " : "s ", vies[0], compteurPO[0] <= 1 ? " " : "s ", compteurPO[0], clefs[0] <= 1 ? " " : "s ", clefs[0]); //Merci Julien pour les opérateurs ternaires
-	printf(" Ennemi : Vie%s: %d - Pièce%s: %d - Clé%s: %d\n", vies[1] <= 1 ? " " : "s ", vies[1], compteurPO[1] <= 1 ? " " : "s ", compteurPO[1], clefs[1] <= 1 ? " " : "s ", clefs[1]);
+	printf(" Lui : Vie%s: %d - Pièce%s: %d - Clé%s: %d\n", vies[1] <= 1 ? " " : "s ", vies[1], compteurPO[1] <= 1 ? " " : "s ", compteurPO[1], clefs[1] <= 1 ? " " : "s ", clefs[1]);
 
 	//Boucles for imbriquées pour lire le terrain
 	for (i = 0; i < TAILLE_TERRAIN_HAUTEUR; i++)
@@ -145,19 +145,20 @@ void remplirCouleur(int couleurs[10])
 	couleurs[HERBE] = HERBECL; couleurs[FLEUR] = FLEURCL; couleurs[ARBRE] = ARBRECL;
 	couleurs[ROCHER] = ROCHERCL; couleurs[CLEF] = CLEFCL; couleurs[PO] = POCL;
 	couleurs[CADENAS] = CADENASCL; couleurs[PIEGE] = PIEGECL; couleurs[MONSTRE] = MONSTRECL;
+	couleurs[MONSTREEN] = MONSTREENCL;
 }
 
 //fonction d'affichage du résultat de la partie
 void fin(int compteurPO, int testFin)
 {
 	//Si le joueur n'a pas atteint les dix pièces d'or et n'a pas arrété le jeu
-	if ((compteurPO < 10) && (testFin != FIN))
+	if ((compteurPO < PIECES_FINALES) && (testFin != FIN))
 	{
 		//Il n'avait plus de vie, il a perdu
 		printf("Tu as perdu avec %d pièces d'or.\n", compteurPO);
 	}
 	//Sinon, si le joueur a atteint les dix pièces d'or
-	else if (compteurPO >= 10)
+	else if (compteurPO >= PIECES_FINALES)
 	{
 		//Il a gagné
 		printf("Tu as gagné !\n");

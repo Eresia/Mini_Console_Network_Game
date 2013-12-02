@@ -13,6 +13,7 @@ int main(int argc, char const *argv[])
 	int compteurPO[2] = {0,0};
 	int vies[2] = {10,10};
 	int clefs[2] = {0, 0};
+	int tour = 0;
 
 	positionPerso[0][0] = 19;
 	positionPerso[0][1] = 19;
@@ -56,6 +57,11 @@ int main(int argc, char const *argv[])
 		//deplacement du personnage (renvoie faux si le personnage a gagné / perdu / arrété)
 		testFin = deplace_personnage(terrain, positionPerso[0], &compteurPO[0], &vies[0], &clefs[0], message);
 		
+		if (testFin && (tour == 1))
+		{
+			testFin = deplace_ennemi(terrain, sousTerrain, positionPerso[0], &vies[0], message, MONSTREEN);
+		}
+
 		if (testFin == false)
 		{
 			write(s_dial, "false", 100);
@@ -65,12 +71,25 @@ int main(int argc, char const *argv[])
 			donner_position_serveur(s_dial, positionPerso[0]);
 			testFin = recevoir_position_serveur(s_dial, positionPerso[1]);
 			application_terrain(terrain, positionPerso[1], &compteurPO[1], &vies[1], &clefs[1], messageEnnemi);
+			if (tour == 1)
+			{
+				deplace_ennemi(terrain, sousTerrain, positionPerso[1], &vies[1], messageEnnemi, MONSTRE);
+				tour = 0;
+			}
+			else
+			{
+				tour = 1;
+			}
+		}
+		if ((compteurPO[0] + compteurPO[1]) >= PIECES_FINALES)
+		{
+			testFin = false;
 		}
 	}
 	//On affiche la carte finale
 	affiche_carte(terrain, positionPerso, compteurPO, vies, clefs, tutoriel);	//on affiche le résultat
 	//on affiche le résultat
-	fin(compteurPO[0], testFin);
+	fin(compteurPO[0] + compteurPO[1], testFin);
 
 	return 0;
 }
