@@ -1,4 +1,4 @@
-ProjetS1_Reseau
+Mini_Console_Network_Game
 ===============
 
-Projet S1 avec intégration du réseau
+Mini jeu console en réseau en C
